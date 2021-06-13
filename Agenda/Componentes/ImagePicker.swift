@@ -1,11 +1,3 @@
-//
-//  ImagePicker.swift
-//  Agenda
-//
-//  Created by Gabriela Sillis on 07/06/21.
-//  Copyright © 2021 Alura. All rights reserved.
-//
-
 import UIKit
 
 protocol ImagePickerSelectedPhoto {
@@ -16,13 +8,24 @@ class ImagePicker: NSObject, UIImagePickerControllerDelegate, UINavigationContro
     
     //MARK: - Atributos
     
-    var delegate: ImagePickerSelectedPhoto?
+   public var delegate: ImagePickerSelectedPhoto?
     
     //MARK: - Métodos
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let photo = info[UIImagePickerControllerOriginalImage] as! UIImage
-        delegate?.imagePickerSelectedPhoto(photo)
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let photo = info[.originalImage] as? UIImage {
+            self.delegate?.imagePickerSelectedPhoto(photo)
+        } else {
+            print ("Erro ao salvar a imagem")
+        }
         picker.dismiss(animated: true, completion: nil)
     }
+}
+
+fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
+    return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
+}
+
+fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
+    return input.rawValue
 }

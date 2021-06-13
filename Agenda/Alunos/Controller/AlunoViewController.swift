@@ -25,7 +25,7 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
         super.viewDidLoad()
         self.arredondaView()
         self.setUp()
-        NotificationCenter.default.addObserver(self, selector: #selector(aumentarScrollView(_:)), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(aumentarScrollView(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {

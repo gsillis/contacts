@@ -1,6 +1,6 @@
 import UIKit
 
-class AlunoViewController: UIViewController {
+class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     
     // MARK: - IBOutlets
     
@@ -15,11 +15,16 @@ class AlunoViewController: UIViewController {
     @IBOutlet weak var textFieldSite: UITextField!
     @IBOutlet weak var textFieldNota: UITextField!
     
+    //MARK: - Atributos
+    
+    var imagePicker = ImagePicker()
+    
     // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.arredondaView()
+        self.setUp()
         NotificationCenter.default.addObserver(self, selector: #selector(aumentarScrollView(_:)), name: .UIKeyboardWillShow, object: nil)
     }
     
@@ -28,6 +33,10 @@ class AlunoViewController: UIViewController {
     }
     
     // MARK: - Métodos
+    
+    func setUp() {
+        imagePicker.delegate = self
+    }
     
     func arredondaView() {
         self.viewImagemAluno.layer.cornerRadius = self.viewImagemAluno.frame.width / 2
@@ -39,14 +48,20 @@ class AlunoViewController: UIViewController {
         self.scrollViewPrincipal.contentSize = CGSize(width: self.scrollViewPrincipal.frame.width, height: self.scrollViewPrincipal.frame.height + self.scrollViewPrincipal.frame.height/2)
     }
     
+    //MARK: - Delegate
+    
+    func imagePickerSelectedPhoto(_ photo: UIImage) {
+        imageAluno.image = photo
+    }
+    
     // MARK: - IBActions
     
     @IBAction func buttonFoto(_ sender: UIButton) {
         
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             let multimidia = UIImagePickerController()
-            
             multimidia.sourceType = .camera
+            multimidia.delegate = imagePicker
             self.present(multimidia, animated: true, completion: nil)
         }
     }

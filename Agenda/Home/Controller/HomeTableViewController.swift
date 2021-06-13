@@ -17,7 +17,7 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate {
     
     func configuraSearch() {
         self.searchController.searchBar.delegate = self
-        self.searchController.dimsBackgroundDuringPresentation = false
+        self.searchController.obscuresBackgroundDuringPresentation = false
         self.navigationItem.searchController = searchController
     }
 
@@ -33,7 +33,7 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
             tableView.deleteRows(at: [indexPath], with: .fade)

@@ -4,6 +4,11 @@ protocol ImagePickerSelectedPhoto {
     func imagePickerSelectedPhoto(_ photo: UIImage)
 }
 
+enum optionsMenu {
+    case camera
+    case galery
+}
+
 class ImagePicker: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     //MARK: - Atributos
@@ -21,16 +26,20 @@ class ImagePicker: NSObject, UIImagePickerControllerDelegate, UINavigationContro
         picker.dismiss(animated: true, completion: nil)
     }
     
-    func optionsMenu() -> UIAlertController {
+    func optionsMenu(completion: @escaping(_ option: optionsMenu) -> Void) -> UIAlertController {
         let options = UIAlertController(title: "Atenção", message: "Escolha uma das opções abaixo", preferredStyle: .actionSheet)
         let camera = UIAlertAction(title: "Tirar foto", style: .default) { action in
-            //implementar depois
-        }
-        let galery = UIAlertAction(title: "Escolher da galeria", style: .default) { action in
-            //implementar depois
+            completion(.camera)
         }
         options.addAction(camera)
+        
+        let galery = UIAlertAction(title: "Escolher da galeria", style: .default) { action in
+            completion(.galery)
+        }
         options.addAction(galery)
+        
+        let cancel = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
+        options.addAction(cancel)
         
         return options
     }

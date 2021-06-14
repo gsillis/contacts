@@ -20,7 +20,7 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     var imagePicker = ImagePicker()
     
     // MARK: - View Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.arredondaView()
@@ -48,6 +48,18 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
         self.scrollViewPrincipal.contentSize = CGSize(width: self.scrollViewPrincipal.frame.width, height: self.scrollViewPrincipal.frame.height + self.scrollViewPrincipal.frame.height/2)
     }
     
+    func showMedia(_ option: optionsMenu) {
+        let multimidia = UIImagePickerController()
+        multimidia.delegate = imagePicker
+        
+        if option == .camera && UIImagePickerController.isSourceTypeAvailable(.camera) {
+            multimidia.sourceType = .camera
+        } else {
+            multimidia.sourceType = .photoLibrary
+        }
+        self.present(multimidia, animated: true, completion: nil)
+    }
+    
     //MARK: - Delegate
     
     func imagePickerSelectedPhoto(_ photo: UIImage) {
@@ -57,18 +69,13 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     // MARK: - IBActions
     
     @IBAction func buttonFoto(_ sender: UIButton) {
-        
-        if UIImagePickerController.isSourceTypeAvailable(.camera) {
-            let multimidia = UIImagePickerController()
-            multimidia.sourceType = .camera
-            multimidia.delegate = imagePicker
-            self.present(multimidia, animated: true, completion: nil)
+        let menu = ImagePicker().optionsMenu { option in
+            self.showMedia(option)
         }
+        present(menu, animated: true, completion: nil)
     }
     
     @IBAction func stepperNota(_ sender: UIStepper) {
         self.textFieldNota.text = "\(sender.value)"
     }
-    
-    
 }

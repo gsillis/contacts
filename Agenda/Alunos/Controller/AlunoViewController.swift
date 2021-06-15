@@ -1,4 +1,5 @@
 import UIKit
+import CoreData
 
 class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     
@@ -18,6 +19,11 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     //MARK: - Atributos
     
     var imagePicker = ImagePicker()
+    
+    var context: NSManagedObjectContext {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.persistentContainer.viewContext
+    }
     
     // MARK: - View Lifecycle
     
@@ -77,5 +83,22 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     
     @IBAction func stepperNota(_ sender: UIStepper) {
         self.textFieldNota.text = "\(sender.value)"
+    }
+    
+    @IBAction func buttonSave(_ sender: Any) {
+        let contact = Contact(context: context)
+        
+        contact.name = textFieldNome.text
+        contact.address = textFieldEndereco.text
+        contact.nota = (textFieldNota.text! as NSString).doubleValue
+        contact.phone = textFieldTelefone.text
+        contact.photo = imageAluno.image
+        
+        do {
+            try context.save()
+            navigationController?.popViewController(animated: true)
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }

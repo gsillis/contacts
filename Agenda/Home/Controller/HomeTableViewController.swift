@@ -52,11 +52,7 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celula-aluno", for: indexPath) as! HomeTableViewCell
         guard let contact = manageResults?.fetchedObjects![indexPath.row] else {return cell}
-        cell.labelNomeDoAluno.text = contact.name
-        
-        if let image = contact.photo as? UIImage {
-            cell.imageAluno.image = image
-        }
+        cell.configCell(contact)
         return cell
     }
     

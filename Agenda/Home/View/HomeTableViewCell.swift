@@ -17,5 +17,15 @@ class HomeTableViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    
+    func configCell(_ contact: Contact) {
+        self.labelNomeDoAluno.text = contact.name
+        imageAluno.layer.cornerRadius = imageAluno.frame.width / 2
+        imageAluno.layer.masksToBounds = true
+         
+        if let image = contact.photo as? UIImage {
+            self.imageAluno.image = image
+        }
+    }
 
 }

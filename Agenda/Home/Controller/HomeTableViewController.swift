@@ -1,7 +1,7 @@
 import UIKit
 import  CoreData
 
-class HomeTableViewController: UITableViewController, UISearchBarDelegate {
+class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFetchedResultsControllerDelegate {
     
     //MARK: - Variáveis
     
@@ -26,6 +26,8 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate {
         manageResults = NSFetchedResultsController(fetchRequest: searchContacts,
                                                    managedObjectContext: AlunoViewController().context,
                                                    sectionNameKeyPath: nil , cacheName: nil)
+        manageResults?.delegate = self
+        
         do {
             try  manageResults?.performFetch()
         } catch {
@@ -50,11 +52,7 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celula-aluno", for: indexPath) as! HomeTableViewCell
         guard let contact = manageResults?.fetchedObjects![indexPath.row] else {return cell}
-        cell.labelNomeDoAluno.text = contact.name
-        
-        if let image = contact.photo as? UIImage {
-            cell.imageAluno.image = image
-        }
+        cell.configCell(contact)
         return cell
     }
     
@@ -70,5 +68,16 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-
+    
+    //MARK - FetchedResultsControllerDelegate
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        switch type {
+        case .delete:
+            //implementar depois
+        break
+        default:
+            tableView.reloadData()
+        }
+    }
 }

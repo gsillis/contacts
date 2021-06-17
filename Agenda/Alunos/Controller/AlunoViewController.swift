@@ -17,13 +17,13 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     @IBOutlet weak var textFieldNota: UITextField!
     
     //MARK: - Atributos
-    
-    var imagePicker = ImagePicker()
-    
+
     var context: NSManagedObjectContext {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         return appDelegate.persistentContainer.viewContext
     }
+    var imagePicker = ImagePicker()
+    var contact: Contact?
     
     // MARK: - View Lifecycle
     
@@ -42,6 +42,13 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     
     func setUp() {
         imagePicker.delegate = self
+        guard let selectedContact = contact else { return }
+        textFieldNome.text = selectedContact.name
+        textFieldEndereco.text = selectedContact.address
+        textFieldTelefone.text = selectedContact.phone
+        textFieldSite.text = selectedContact.site
+        textFieldNota.text = String(selectedContact.nota)
+        imageAluno.image = selectedContact.photo as? UIImage
     }
     
     func arredondaView() {
@@ -86,13 +93,15 @@ class AlunoViewController: UIViewController, ImagePickerSelectedPhoto {
     }
     
     @IBAction func buttonSave(_ sender: Any) {
-        let contact = Contact(context: context)
-        
-        contact.name = textFieldNome.text
-        contact.address = textFieldEndereco.text
-        contact.nota = (textFieldNota.text! as NSString).doubleValue
-        contact.phone = textFieldTelefone.text
-        contact.photo = imageAluno.image
+        if contact == nil {
+            contact = Contact(context: context)
+        }
+        contact?.name = textFieldNome.text
+        contact?.address = textFieldEndereco.text
+        contact?.nota = (textFieldNota.text! as NSString).doubleValue
+        contact?.phone = textFieldTelefone.text
+        contact?.photo = imageAluno.image
+        contact?.site = textFieldSite.text
         
         do {
             try context.save()

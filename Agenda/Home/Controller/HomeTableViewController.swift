@@ -69,8 +69,8 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            guard let selectContact =  manageResults?.fetchedObjects![indexPath.row] else { return }
+            AlunoViewController().context.delete(selectContact)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    

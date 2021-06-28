@@ -121,8 +121,8 @@
 		DEA48AF4266EB7D6002E5C55 /* Componentes */ = {
 			isa = PBXGroup;
 			children = (
-				DEA48AF5266EB805002E5C55 /* ImagePicker.swift */,
 				DE6A5973268A137A00B35A03 /* OptionsMenu.swift */,
+				DEA48AF5266EB805002E5C55 /* ImagePicker.swift */,
 			);
 			path = Componentes;
 			sourceTree = "<group>";

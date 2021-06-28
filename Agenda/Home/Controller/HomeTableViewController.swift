@@ -50,7 +50,13 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     
     @objc func openActionSheet(_ longPress: UILongPressGestureRecognizer) {
         if longPress.state == .began {
-            print("clique")
+            let menu = OptionsMenu().optionsMenu { option in
+                switch option {
+                case .sms:
+                    print("clique")
+                }
+            }
+            self.present(menu, animated: true, completion: nil)
         }
     }
     

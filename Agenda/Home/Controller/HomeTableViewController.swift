@@ -48,6 +48,10 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
         self.navigationItem.searchController = searchController
     }
     
+    @objc func openActionSheet(_ longPress: UILongPressGestureRecognizer) {
+        print("cliquelongo")
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,8 +62,12 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celula-aluno", for: indexPath) as! HomeTableViewCell
+        //implementando
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(openActionSheet(_:)))
         guard let contact = manageResults?.fetchedObjects![indexPath.row] else {return cell}
+        
         cell.configCell(contact)
+        cell.addGestureRecognizer(longPress)
         return cell
     }
     

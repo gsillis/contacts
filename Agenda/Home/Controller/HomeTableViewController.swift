@@ -59,6 +59,13 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
                         messageComponent.messageComposeDelegate = self.message
                         self.present(messageComponent, animated: true, completion: nil)
                     }
+                    break
+                case .call:
+                    guard  let number = selectedContact.phone else { return }
+                    if let url = URL(string: "tel://\(number)"), UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+                    
                 }
             }
             self.present(menu, animated: true, completion: nil)

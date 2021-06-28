@@ -1,6 +1,6 @@
-##Projeto de curso iOS parte 1: Usando recursos nativos
+# Projeto de curso iOS parte 1: Usando recursos nativos
 
-No curso foi abordado
+### No curso foi abordado
 
 - recursos nativos como, câmera e biblioteca de fotos
 - persistência de dados com Core Data

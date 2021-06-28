@@ -11,6 +11,7 @@ import UIKit
 enum OptionsMenuActionSheet {
     case sms
     case call
+    case waze
 }
 class OptionsMenu: NSObject {
 
@@ -19,12 +20,12 @@ class OptionsMenu: NSObject {
         let sms = UIAlertAction(title: "Enviar sms", style: .default) { action in
             completion(.sms)
         }
+        menu.addAction(sms)
         let call = UIAlertAction(title: "Ligar", style: .default) { action in
             completion(.call)
         }
-        let cancel = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
-        menu.addAction(sms)
         menu.addAction(call)
+        let cancel = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
         menu.addAction(cancel)
         return menu
     }

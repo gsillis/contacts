@@ -65,7 +65,9 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
                     if let url = URL(string: "tel://\(number)"), UIApplication.shared.canOpenURL(url) {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     }
-                    
+                  break
+                case .waze:
+                    <#code#>
                 }
             }
             self.present(menu, animated: true, completion: nil)

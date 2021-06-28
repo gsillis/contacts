@@ -66,8 +66,16 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     }
                   break
-                case .waze:
-                    <#code#>
+                case .maps:
+                    if UIApplication.shared.canOpenURL(URL(string: "waze://")!) {
+                        guard let address = selectedContact.address else { return }
+                        Localization().convertAddress(address: address) { locationFound in
+                            let latitude = String(describing: locationFound.location?.coordinate.latitude)
+                            let longitude = String(describing: locationFound.location?.coordinate.longitude)
+                            let url:String = ("waze://?ll=\(latitude),\(longitude)&navigate=yes")
+                            UIApplication.shared.open(URL(string: url)!, options: [:], completionHandler: nil)
+                        }
+                    }
                 }
             }
             self.present(menu, animated: true, completion: nil)
@@ -84,12 +92,12 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celula-aluno", for: indexPath) as! HomeTableViewCell
-        //implementando
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(openActionSheet(_:)))
         guard let contact = manageResults?.fetchedObjects![indexPath.row] else {return cell}
         
         cell.configCell(contact)
         cell.addGestureRecognizer(longPress)
+        longPress.view?.tag = indexPath.row
         return cell
     }
     

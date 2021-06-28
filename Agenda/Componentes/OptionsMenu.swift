@@ -11,7 +11,7 @@ import UIKit
 enum OptionsMenuActionSheet {
     case sms
     case call
-    case waze
+    case maps
 }
 class OptionsMenu: NSObject {
 
@@ -25,6 +25,10 @@ class OptionsMenu: NSObject {
             completion(.call)
         }
         menu.addAction(call)
+        let maps = UIAlertAction(title: "Abrir no maps", style: .default) { action in
+            completion(.maps)
+        }
+        menu.addAction(maps)
         let cancel = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
         menu.addAction(cancel)
         return menu

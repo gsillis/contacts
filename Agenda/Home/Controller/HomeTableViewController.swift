@@ -8,6 +8,7 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     let searchController = UISearchController(searchResultsController: nil)
     var manageResults: NSFetchedResultsController<Contact>?
     var contacViewController: AlunoViewController?
+    var message = Message()
     
     // MARK: - View Lifecycle
     
@@ -48,6 +49,22 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
         self.navigationItem.searchController = searchController
     }
     
+    @objc func openActionSheet(_ longPress: UILongPressGestureRecognizer) {
+        if longPress.state == .began {
+            guard let selectedContact = manageResults?.fetchedObjects?[(longPress.view?.tag)! ] else { return }
+            let menu = OptionsMenu().optionsMenu { option in
+                switch option {
+                case .sms:
+                    if let messageComponent = self.message.configSms(selectedContact) {
+                        messageComponent.messageComposeDelegate = self.message
+                        self.present(messageComponent, animated: true, completion: nil)
+                    }
+                }
+            }
+            self.present(menu, animated: true, completion: nil)
+        }
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -58,8 +75,12 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celula-aluno", for: indexPath) as! HomeTableViewCell
+        //implementando
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(openActionSheet(_:)))
         guard let contact = manageResults?.fetchedObjects![indexPath.row] else {return cell}
+        
         cell.configCell(contact)
+        cell.addGestureRecognizer(longPress)
         return cell
     }
     

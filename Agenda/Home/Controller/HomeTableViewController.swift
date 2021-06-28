@@ -110,7 +110,6 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
             guard let selectContact =  manageResults?.fetchedObjects![indexPath.row] else { return }
             AlunoViewController().context.delete(selectContact)
         } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
     
@@ -130,6 +129,17 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
             break
         default:
             tableView.reloadData()
+        }
+    }
+    
+    //MARK: - Action
+    @IBAction func buttonCalculateAverage(_ sender: UIBarButtonItem) {
+        guard let contact = manageResults?.fetchedObjects else { return }
+        calculateAverage().calculateAverage(contacts: contact, success: {
+            (dictionary) in
+            print(dictionary)
+        }) { error in
+            print(error.localizedDescription)
         }
     }
 }

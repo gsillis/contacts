@@ -8,6 +8,7 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     let searchController = UISearchController(searchResultsController: nil)
     var manageResults: NSFetchedResultsController<Contact>?
     var contacViewController: AlunoViewController?
+    var message = Message()
     
     // MARK: - View Lifecycle
     
@@ -50,10 +51,14 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     
     @objc func openActionSheet(_ longPress: UILongPressGestureRecognizer) {
         if longPress.state == .began {
+            guard let selectedContact = manageResults?.fetchedObjects?[(longPress.view?.tag)! ] else { return }
             let menu = OptionsMenu().optionsMenu { option in
                 switch option {
                 case .sms:
-                    print("clique")
+                    if let messageComponent = self.message.configSms(selectedContact) {
+                        messageComponent.messageComposeDelegate = self.message
+                        self.present(messageComponent, animated: true, completion: nil)
+                    }
                 }
             }
             self.present(menu, animated: true, completion: nil)

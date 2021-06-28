@@ -49,7 +49,9 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     }
     
     @objc func openActionSheet(_ longPress: UILongPressGestureRecognizer) {
-        print("cliquelongo")
+        if longPress.state == .began {
+            print("clique")
+        }
     }
     
     // MARK: - Table view data source

@@ -65,7 +65,17 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
                     if let url = URL(string: "tel://\(number)"), UIApplication.shared.canOpenURL(url) {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     }
-                    
+                  break
+                case .maps:
+                    if UIApplication.shared.canOpenURL(URL(string: "waze://")!) {
+                        guard let address = selectedContact.address else { return }
+                        Localization().convertAddress(address: address) { locationFound in
+                            let latitude = String(describing: locationFound.location?.coordinate.latitude)
+                            let longitude = String(describing: locationFound.location?.coordinate.longitude)
+                            let url:String = ("waze://?ll=\(latitude),\(longitude)&navigate=yes")
+                            UIApplication.shared.open(URL(string: url)!, options: [:], completionHandler: nil)
+                        }
+                    }
                 }
             }
             self.present(menu, animated: true, completion: nil)
@@ -82,12 +92,12 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "celula-aluno", for: indexPath) as! HomeTableViewCell
-        //implementando
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(openActionSheet(_:)))
         guard let contact = manageResults?.fetchedObjects![indexPath.row] else {return cell}
         
         cell.configCell(contact)
         cell.addGestureRecognizer(longPress)
+        longPress.view?.tag = indexPath.row
         return cell
     }
     
@@ -100,7 +110,6 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
             guard let selectContact =  manageResults?.fetchedObjects![indexPath.row] else { return }
             AlunoViewController().context.delete(selectContact)
         } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
     
@@ -120,6 +129,17 @@ class HomeTableViewController: UITableViewController, UISearchBarDelegate, NSFet
             break
         default:
             tableView.reloadData()
+        }
+    }
+    
+    //MARK: - Action
+    @IBAction func buttonCalculateAverage(_ sender: UIBarButtonItem) {
+        guard let contact = manageResults?.fetchedObjects else { return }
+        calculateAverage().calculateAverage(contacts: contact, success: {
+            (dictionary) in
+            print(dictionary)
+        }) { error in
+            print(error.localizedDescription)
         }
     }
 }
